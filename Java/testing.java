@@ -1,6 +1,7 @@
 class testing {
     public static void main(String[] args) {
-        System.out.println("What's poppin? \n" + wuzPoppin());
+        String pop = "What's poppin?";
+        System.out.println(pop + "\n" + wuzPoppin());
 
     }
 

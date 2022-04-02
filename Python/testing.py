@@ -1,7 +1,7 @@
 def wuzPoppin():
     print("Brand new whip just hopped in")
 
-pop = "what's poppin?"
+pop = "What's poppin?"
 
 print(pop)
 wuzPoppin()
