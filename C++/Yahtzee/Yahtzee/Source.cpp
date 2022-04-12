@@ -56,6 +56,7 @@ int main() {
 		rollDice(score, rows, playerNumber, names, used);
 		playerNumber++;
 	}
+	printChart(names, rows, score, players);
 	printWinner(names, score, players);
 
 	return 0;
@@ -214,9 +215,6 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 				}
 				if (notfound) {
 					cout << "Matching row not found, try again." << endl;
-				}
-				else {
-					cout << "Success";
 				}
 			}
 		}
