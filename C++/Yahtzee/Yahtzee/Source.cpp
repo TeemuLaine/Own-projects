@@ -15,7 +15,7 @@ bool checkCompatibility(int, int*);
 void fillScore(int, int*, int[16][4], bool, int);
 int totalPoints(int[16][4], int);
 void printWinner(string[], int[16][4], int);
-
+int nameCheck(string, int);
 
 
 int main() {
@@ -200,13 +200,15 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 				getline(cin, placement);
 				for (int i = 0; i < 16; i++) {
 					if (i != 6 && i != 7 && i != 15) {
-						if (placement == rows[i]) {
+						if ((tolower(placement[0]) == tolower(rows[i][0]) && tolower(placement[1])==tolower(rows[i][1]))) {
 							if (!used[i][playerNumber]) {
+								i = nameCheck(placement, i);
 								match = checkCompatibility(i, dice);
 								fillScore(i, dice, score, match, playerNumber);
 								score[15][playerNumber] = totalPoints(score, playerNumber);
 								notfound = false;
 								used[i][playerNumber] = true;
+								break;
 							}
 							else
 								cout << "You've already used that slot!" << endl;
@@ -447,4 +449,16 @@ void printWinner(string names[],int score[16][4], int players) {
 		}
 	}
 	cout << winner << " wins!" << endl;
+}
+
+int nameCheck(string placement,int i) {
+	if (placement.find("hrees") != string::npos)
+		i = 2;
+	if (placement.find("hree of") != string::npos)
+		i = 8;
+	if (placement.find("ours") != string::npos)
+		i = 3;
+	if (placement.find("ur of") != string::npos)
+		i = 9;
+	return i;
 }
