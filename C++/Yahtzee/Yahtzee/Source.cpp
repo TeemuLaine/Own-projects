@@ -277,7 +277,7 @@ int rollOption() {
 	cout << "2. Roll again? " << endl;
 	do {
 		cin >> input;
-	}while(integerCheck(input));
+	} while(integerCheck(input) || input < 1 || input > 2);
 	cout << endl;
 
 	return input;
