@@ -16,6 +16,7 @@ void fillScore(int, int*, int[16][4], bool, int);
 int totalPoints(int[16][4], int);
 void printWinner(string[], int[16][4], int);
 int nameCheck(string, int);
+bool integerCheck(int);
 
 
 int main() {
@@ -73,14 +74,16 @@ int playerCount() {
 	while (input == "n") {
 		while (players > 4 || players < 1) {
 			cout << "How many players?" << endl;
-			cin >> players;
+			do {
+				cin >> players;
+			} while (integerCheck(players));
 			if (players > 4 || players < 1) {
 				cout << "Please pick between 1-4" << endl;
 			}
 		}
 		while (!yesno) {
 			cout << "You have selected " << players << " players. Are you sure? (y/n) ";
-			cin >> input;
+				cin >> input;
 			if (input == "y" || input == "n")
 				yesno = true;
 		}
@@ -192,26 +195,31 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 			string placement;
 			bool match = false;
 			bool notfound = true;
-			while (notfound) {
+			bool usedRow = true;
+			while (notfound || usedRow) {
 				cout << "Where would you like to place your score?" << endl;
 				rollAgain = false;
-				cin.clear();
-				cin.ignore();
-				getline(cin, placement);
+				usedRow = false;
+				do {
+					getline(cin, placement);
+				} while (placement == "");
 				for (int i = 0; i < 16; i++) {
 					if (i != 6 && i != 7 && i != 15) {
 						if ((tolower(placement[0]) == tolower(rows[i][0]) && tolower(placement[1])==tolower(rows[i][1]))) {
+							i = nameCheck(placement, i);
+							notfound = false;
 							if (!used[i][playerNumber]) {
-								i = nameCheck(placement, i);
 								match = checkCompatibility(i, dice);
 								fillScore(i, dice, score, match, playerNumber);
 								score[15][playerNumber] = totalPoints(score, playerNumber);
-								notfound = false;
 								used[i][playerNumber] = true;
 								break;
 							}
-							else
+							else {
 								cout << "You've already used that slot!" << endl;
+								usedRow = true;
+								break;
+							}
 						}
 					}
 				}
@@ -234,7 +242,7 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 					}
 			cout << ") ";
 			}
-			cin >> keep;
+						cin >> keep;
 			for (int i = 0; i < keep.length(); i++) {
 				for (int a = 0; a < 5; a++) {
 					if (keep[i]-'0' == dice[a] && !hold[a]) {
@@ -267,7 +275,9 @@ int rollOption() {
 	cout << "Would you like to " << endl;
 	cout << "1. Make your pick" << endl;
 	cout << "2. Roll again? " << endl;
-	cin >> input;
+	do {
+		cin >> input;
+	}while(integerCheck(input));
 	cout << endl;
 
 	return input;
@@ -452,13 +462,30 @@ void printWinner(string names[],int score[16][4], int players) {
 }
 
 int nameCheck(string placement,int i) {
-	if (placement.find("hrees") != string::npos)
+	if (placement.find("th") != string::npos && i != 8)
 		i = 2;
-	if (placement.find("hree of") != string::npos)
+	if (placement.find("ree of") != string::npos)
 		i = 8;
-	if (placement.find("ours") != string::npos)
+	if (placement.find("fo") != string::npos &&  i!= 9)
 		i = 3;
 	if (placement.find("ur of") != string::npos)
 		i = 9;
 	return i;
 }
+
+bool integerCheck(int check) {
+	bool error = true; 
+
+	if (!check) { 
+		cin.clear();
+		cin.ignore(80, '\n');
+		cout << "Please input a number " << endl;
+		error = true;
+	}
+
+	else {
+		error = false;
+	}
+	return error;
+}
+
