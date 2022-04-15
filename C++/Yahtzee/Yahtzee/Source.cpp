@@ -9,7 +9,7 @@ void welcome();
 int playerCount();
 int rollOption();
 string playerNames();
-void printChart(string[], string[],int[16][4], int);
+void printChart(string[], string[],int[16][4], int, bool[16][4]);
 void rollDice(int[16][4], string[], int, string*, bool[16][4]);
 bool checkCompatibility(int, int*);
 void fillScore(int, int*, int[16][4], bool, int);
@@ -53,11 +53,11 @@ int main() {
 		if (playerNumber == players) {
 			playerNumber = 0;
 		}
-		printChart(names, rows, score, players);
+		printChart(names, rows, score, players, used);
 		rollDice(score, rows, playerNumber, names, used);
 		playerNumber++;
 	}
-	printChart(names, rows, score, players);
+	printChart(names, rows, score, players, used);
 	printWinner(names, score, players);
 
 	return 0;
@@ -100,62 +100,54 @@ string playerNames() {
 }
 
 
-void printChart(string* names, string* rows,int score[16][4], int players) {
+void printChart(string* names, string* rows,int score[16][4], int players, bool used[16][4]) {
+	string player[4];
 	cout << "\t \t";
 	for (int i = 0; i < players; i++) {
 		cout << names[i] << "\t";
 	}
 	cout << endl;
-	if (players == 4) {
 		for (int i = 0; i < 16; i++) {
 			if (i == 0 || i == 6 || i == 8 || i == 15) {
-				cout << "--------------------------------------------" << endl;
+				
+				cout << "-----------------";
+				for (int a = 0; a < players-1; a++) {
+					cout << "---------";
+				}
+				cout << endl;
 			}
-			if (i < 8 || (i > 12 && i != 15))
-				cout << rows[i] << "\t \t" << score[i][0] << " \t" << score[i][1] << "\t" << score[i][2] << "\t" << score[i][3] << endl;
-			else
-				cout << rows[i] << "\t" << score[i][0] << " \t" << score[i][1] << "\t" << score[i][2] << "\t" << score[i][3] << endl;
-		}
-	}
-	if (players == 3) {
-		for (int i = 0; i < 16; i++) {
-			if (i == 0 || i == 6 || i == 8 || i == 15) {
-				cout << "------------------------------------" << endl;
+			if (i < 8 || (i > 12 && i != 15)) {
+				cout << rows[i] << "\t";
+				for (int a = 0; a < players; a++) {
+					if (used[i][a] || i == 6 || i == 7 || i == 15) {
+						player[a] = to_string(score[i][a]);
+					}
+					else player[a] = "-";
+					cout << "\t" << player[a];
+					if (a == players - 1)
+						cout << endl;
+				}
 			}
-			if (i < 8 || (i > 12 && i != 15))
-				cout << rows[i] << "\t \t" << score[i][0] << " \t" << score[i][1] << "\t" << score[i][2] << endl;
-			else
-				cout << rows[i] << "\t" << score[i][0] << " \t" << score[i][1] << "\t" << score[i][2] << endl;
-		}
-	}
-	if (players == 2) {
-		for (int i = 0; i < 16; i++) {
-			if (i == 0 || i == 6 || i == 8 || i == 15) {
-				cout << "----------------------------" << endl;
+			else{
+				cout << rows[i];
+				for (int a = 0; a < players; a++) {
+					if (used[i][a] || i == 6 || i == 7 ||i == 15) {
+						player[a] = to_string(score[i][a]);
+					}
+					else player[a] = "-";
+					cout << "\t" << player[a];
+					if (a == players - 1)
+						cout << endl;
+				}
 			}
-			if (i < 8 || (i > 12 && i != 15))
-				cout << rows[i] << "\t \t" << score[i][0] << " \t" << score[i][1] << endl;
-			else
-				cout << rows[i] << "\t" << score[i][0] << " \t" << score[i][1] << endl;
-		}
-	}
-	if (players == 1) {
-		for (int i = 0; i < 16; i++) {
-			if (i == 0 || i == 6 || i == 8 || i == 15) {
-				cout << "--------------------" << endl;
-			}
-			if (i < 8 || (i > 12 && i != 15))
-				cout << rows[i] << "\t \t" << score[i][0] << endl;
-			else
-				cout << rows[i] << "\t" << score[i][0] << endl;
-		}
+		
 	}
 	cout << endl;
 }
 
 void rollDice(int score[16][4], string* rows, int playerNumber, string* names, bool used[16][4]) {
 	int option;
-	int dice[5] = {4,3,6,5,2};
+	int dice[5] = {4,3,6,5,5};
 	bool hold[5] = { false };
 	int counter = 0;
 	int taken = 5;
@@ -163,11 +155,11 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 	cout << names[playerNumber] << ", roll dice with any key" << endl << endl;
 	_getch();
 	while (rollAgain) {
-		for (int i = 0; i < 5; i++) {
+		/*for (int i = 0; i < 5; i++) {
 			if (!hold[i]) {
 				dice[i] = 1 + rand() % 6;
 			}
-		}
+		}*/
 		for (int i = 0; i < 5; i++) {
 			cout << dice[i] << " ";
 		}
@@ -180,10 +172,8 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 			option = 1;
 		if (option == 1) {
 			int temp; // sort from largest to smallest;
-			for (int i = 0; i < 5; i++)
-			{
-				for (int j = i + 1; j < 5; j++)
-				{
+			for (int i = 0; i < 5; i++) {
+				for (int j = i + 1; j < 5; j++)	{
 					if (dice[i] > dice[j])
 					{
 						temp = dice[i];
@@ -323,71 +313,44 @@ bool checkCompatibility(int i, int* dice) {
 			return true;
 	}
 	if (i == 11) { // Small straight check
-		for (int a = 0; a < 3; a++) {
-			if (dice[a] + 1 == dice[a + 1] && dice[a] + 2 == dice[a + 2] && dice[a] + 3 == dice[a + 3]) {
+		int check[5] = {};
+		int e = 0;
+		for (int i = 0; i < 5; i++) {
+			if (dice[i] != dice[i + 1]) {
+				check[e] = dice[i];
+				e++;
+			}
+		}
+		for (int a = 0; a < 2; a++) {
+			if (check[a] + 1 == check[a + 1] && check[a] + 2 == check[a + 2] && check[a] + 3 == check[a + 3]) {
 				return true;
 			}
 		}
 	}
-	if (i == 12) { // Large straight check
-		for (int a = 0; a < 2; a++) {
+		if (i == 12) { // Large straight check
+			int a = 0;
 			if (dice[a] + 1 == dice[a + 1] && dice[a] + 2 == dice[a + 2] && dice[a] + 3 == dice[a + 3] && dice[a] + 4 == dice[a + 4]) {
 				return true;
 			}
 		}
-	}
-	if (i == 13) {
-		return true;
-	}
-	if (i == 14) {
-		if (dice[0] == dice[1] && dice[0] == dice[2] && dice[0] == dice[3] && dice[0] == dice[4]) {
+		if (i == 13) {
 			return true;
 		}
+		if (i == 14) {
+			if (dice[0] == dice[1] && dice[0] == dice[2] && dice[0] == dice[3] && dice[0] == dice[4]) {
+				return true;
+			}
+		}
+		return false;
 	}
-	return false;
-}
 
 void fillScore(int i, int* dice,int score[16][4], bool match, int playerNumber) {
 	int total = 0;
-	if (i == 0) {
+	if (i >= 0 && i < 6) {
+		int pips = i + 1;
 		for (int a = 0; a < 5; a++) {
-			if (dice[a] == 1) {
-				total++;
-			}
-		}
-	}
-	if (i == 1) {
-		for (int a = 0; a < 5; a++) {
-			if (dice[a] == 2) {
-				total += 2;
-			}
-		}
-	}
-	if (i == 2) {
-		for (int a = 0; a < 5; a++) {
-			if (dice[a] == 3) {
-				total += 3;
-			}
-		}
-	}
-	if (i == 3) {
-		for (int a = 0; a < 5; a++) {
-			if (dice[a] == 4) {
-				total += 4;
-			}
-		}
-	}
-	if (i == 4) {
-		for (int a = 0; a < 5; a++) {
-			if (dice[a] == 5) {
-				total += 5;
-			}
-		}
-	}
-	if (i == 5) {
-		for (int a = 0; a < 5; a++) {
-			if (dice[a] == 6) {
-				total += 6;
+			if (dice[a] == pips) {
+				total += pips;
 			}
 		}
 	}
@@ -488,4 +451,3 @@ bool integerCheck(int check) {
 	}
 	return error;
 }
-
