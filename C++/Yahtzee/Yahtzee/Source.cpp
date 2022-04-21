@@ -69,9 +69,6 @@ void welcome() {
 
 int playerCount() {
 	int players = 0;
-	string input = "n";
-	bool yesno = false;
-	while (input == "n") {
 		while (players > 4 || players < 1) {
 			cout << "How many players?" << endl;
 			do {
@@ -80,13 +77,6 @@ int playerCount() {
 			if (players > 4 || players < 1) {
 				cout << "Please pick between 1-4" << endl;
 			}
-		}
-		while (!yesno) {
-			cout << "You have selected " << players << " players. Are you sure? (y/n) ";
-				cin >> input;
-			if (input == "y" || input == "n")
-				yesno = true;
-		}
 	}
 	return players;
 }
@@ -155,11 +145,11 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 	cout << names[playerNumber] << ", roll dice with any key" << endl << endl;
 	_getch();
 	while (rollAgain) {
-		/*for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			if (!hold[i]) {
 				dice[i] = 1 + rand() % 6;
 			}
-		}*/
+		}
 		for (int i = 0; i < 5; i++) {
 			cout << dice[i] << " ";
 		}
