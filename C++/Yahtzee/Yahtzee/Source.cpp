@@ -2,6 +2,7 @@
 #include <time.h>
 #include <conio.h>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -9,12 +10,12 @@ void welcome();
 int playerCount();
 int rollOption();
 string playerNames();
-void printChart(string[], string[],int[16][4], int, bool[16][4]);
-void rollDice(int[16][4], string[], int, string*, bool[16][4]);
+void printChart(string*, string*,int**, int, bool**);
+void rollDice(int**, string*, int, string*, bool**, int);
 bool checkCompatibility(int, int*);
-void fillScore(int, int*, int[16][4], bool, int);
-int totalPoints(int[16][4], int);
-void printWinner(string[], int[16][4], int);
+void fillScore(int, int*, int**, bool, int, int);
+int totalPoints(int**, int, int);
+void printWinner(string*, int**, int);
 int nameCheck(string, int);
 bool integerCheck(int);
 
@@ -40,10 +41,16 @@ int main() {
 	"TOTAL SCORE"
 	};
 	welcome();
-	string names[4];
-	int score[16][4] = {0};
-	bool used[16][4] = { false };
 	int players = playerCount();
+	int* score = new int[16 * players];
+	bool* used = new bool[16 * players];
+	for (int i = 0; i < 16; i++) {
+		for (int j = 0; j < players; j++) {
+			*(score + i*players + j) = 0;
+			*(used + i*players +j) = false;
+		}
+	}
+	string* names = new string[players];
 	int roundCount = 13 * players;
 	int playerNumber = 0;
 	for (int i = 0; i < players; i++) {
@@ -53,12 +60,12 @@ int main() {
 		if (playerNumber == players) {
 			playerNumber = 0;
 		}
-		printChart(names, rows, score, players, used);
-		rollDice(score, rows, playerNumber, names, used);
+		printChart(names, rows, &score, players, &used);
+		rollDice(&score, rows, playerNumber, names, &used, players);
 		playerNumber++;
 	}
-	printChart(names, rows, score, players, used);
-	printWinner(names, score, players);
+	printChart(names, rows, &score, players, &used);
+	printWinner(names, &score, players);
 
 	return 0;
 }
@@ -69,15 +76,10 @@ void welcome() {
 
 int playerCount() {
 	int players = 0;
-		while (players > 4 || players < 1) {
 			cout << "How many players?" << endl;
 			do {
 				cin >> players;
 			} while (integerCheck(players));
-			if (players > 4 || players < 1) {
-				cout << "Please pick between 1-4" << endl;
-			}
-	}
 	return players;
 }
 
@@ -90,8 +92,8 @@ string playerNames() {
 }
 
 
-void printChart(string* names, string* rows,int score[16][4], int players, bool used[16][4]) {
-	string player[4];
+void printChart(string* names, string* rows, int** score, int players, bool** used) {
+	string* player = new string[players];
 	cout << "\t \t";
 	for (int i = 0; i < players; i++) {
 		cout << names[i] << "\t";
@@ -109,8 +111,10 @@ void printChart(string* names, string* rows,int score[16][4], int players, bool 
 			if (i < 8 || (i > 12 && i != 15)) {
 				cout << rows[i] << "\t";
 				for (int a = 0; a < players; a++) {
-					if (used[i][a] || i == 6 || i == 7 || i == 15) {
-						player[a] = to_string(score[i][a]);
+					if (*(*used + i*players + a) == true || i == 6 || i == 7 || i == 15) {
+						std::ostringstream address;
+						address << *(*score + i*players + a);
+						player[a] = address.str();
 					}
 					else player[a] = "-";
 					cout << "\t" << player[a];
@@ -121,8 +125,10 @@ void printChart(string* names, string* rows,int score[16][4], int players, bool 
 			else{
 				cout << rows[i];
 				for (int a = 0; a < players; a++) {
-					if (used[i][a] || i == 6 || i == 7 ||i == 15) {
-						player[a] = to_string(score[i][a]);
+					if (*(*used + i*players + a) == true || i == 6 || i == 7 ||i == 15) {
+						std::ostringstream address;
+						address << *(*score + i*players + a);
+						player[a] = address.str();
 					}
 					else player[a] = "-";
 					cout << "\t" << player[a];
@@ -135,7 +141,7 @@ void printChart(string* names, string* rows,int score[16][4], int players, bool 
 	cout << endl;
 }
 
-void rollDice(int score[16][4], string* rows, int playerNumber, string* names, bool used[16][4]) {
+void rollDice(int** score, string* rows, int playerNumber, string* names, bool** used, int players) {
 	int option;
 	int dice[5] = {4,3,6,5,5};
 	bool hold[5] = { false };
@@ -188,11 +194,11 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 						if ((tolower(placement[0]) == tolower(rows[i][0]) && tolower(placement[1])==tolower(rows[i][1]))) {
 							i = nameCheck(placement, i);
 							notfound = false;
-							if (!used[i][playerNumber]) {
+							if (*(*used + i*players + playerNumber) == false) {
 								match = checkCompatibility(i, dice);
-								fillScore(i, dice, score, match, playerNumber);
-								score[15][playerNumber] = totalPoints(score, playerNumber);
-								used[i][playerNumber] = true;
+								fillScore(i, dice, score, match, playerNumber, players);
+								*(*score + 15*players + playerNumber) = totalPoints(score, playerNumber, players);
+								*(*used + i*players + playerNumber) = true;
 								break;
 							}
 							else {
@@ -233,7 +239,7 @@ void rollDice(int score[16][4], string* rows, int playerNumber, string* names, b
 			}
 			if (counter > 0) {
 				cout << endl;
-				cout << "Which dice would you like to free?" << endl;
+				cout << "Which dice would you like to free? ";
 				cin >> keep;
 				for (int i = 0; i < keep.length(); i++) {
 					for (int a = 0; a < 5; a++) {
@@ -334,7 +340,7 @@ bool checkCompatibility(int i, int* dice) {
 		return false;
 	}
 
-void fillScore(int i, int* dice,int score[16][4], bool match, int playerNumber) {
+void fillScore(int i, int* dice,int** score, bool match, int playerNumber, int players) {
 	int total = 0;
 	if (i >= 0 && i < 6) {
 		int pips = i + 1;
@@ -384,30 +390,30 @@ void fillScore(int i, int* dice,int score[16][4], bool match, int playerNumber) 
 		else total = 0;
 	}
 	int sum = 0;
-	score[i][playerNumber] = total;
+	*(*score + i*players + playerNumber) = total;
 	for (int a = 0; a < 6; a++) {
-		sum += score[a][playerNumber];
+		sum += *(*score + a* players + playerNumber);
 	}
-	score[6][playerNumber] = sum;
+	*(*score + 6*players + playerNumber) = sum;
 	if (sum > 62) {
-		score[7][playerNumber] = 35;
+	*(*score + 7*players + playerNumber) = 35;
 	}
 }
 
-int totalPoints(int score[16][4], int playerNumber) {
+int totalPoints(int** score, int playerNumber, int players) {
 	int sum = 0;
 	for (int i = 0; i < 15; i++) {
-		sum += score[i][playerNumber];
+		sum += *(*score+ i*players + playerNumber);
 	}
-	return sum-score[6][playerNumber];
+	return sum-(*(*score + 6*players + playerNumber));
 }
 
-void printWinner(string names[],int score[16][4], int players) {
+void printWinner(string* names,int** score, int players) {
 	int mostPoints = 0;
 	string winner;
 	for (int i = 0; i < players; i++) {
-		if (score[15][i] > mostPoints) {
-			mostPoints = score[15][i];
+		if (*(*score + 15*players + i) > mostPoints) {
+			mostPoints = *(*score + 15 * players + i);
 			winner = names[i];
 		}
 	}
