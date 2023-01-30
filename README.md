@@ -1,2 +1,0 @@
-# Own-projects
-Random projects
