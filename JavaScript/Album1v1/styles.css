@@ -1,0 +1,48 @@
+body {
+    background-color: rgb(31, 0, 0);
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+#main-container {
+    display: flex;
+}
+
+#album-list-container{
+    background-color: rgb(226, 158, 158);
+    width: 50%;
+    border: 1px black solid;
+    margin: 5px;
+}
+
+#album-list-container {
+    flex-direction: column;
+}
+
+.list-item-container {
+    display: flex;
+    margin: 5px;
+}
+
+.list-item-container:hover {
+    background-color: lightgrey;
+}
+
+.list-item-album {
+    text-align: left;
+    width: 70%;
+}
+
+.list-item-cover {
+    width: 30%;
+}
+
+.list-item-cover>img {
+    width: 30px;
+    height: 30px;
+
+}
+
+.list-item-cover {
+    margin-top: 9px;
+}
