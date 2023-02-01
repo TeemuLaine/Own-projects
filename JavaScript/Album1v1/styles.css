@@ -2,47 +2,45 @@ body {
     background-color: rgb(31, 0, 0);
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    height:100vh;
+    width:100vw;
+    position:absolute;
+    top:0;
+    left:0;
+    overflow:hidden;
 }
 
-#main-container {
-    display: flex;
+#matchup-container{
+    color:white;
+    display:inline-block;
+    height:1000px;
 }
 
-#album-list-container{
-    background-color: rgb(226, 158, 158);
-    width: 50%;
-    border: 1px black solid;
-    margin: 5px;
+.album-container{
+    margin:200px;
+    margin-top:30px;
+    margin-bottom:20px;
+    width:500px;
+    height:500px;
+    float:left;
 }
 
-#album-list-container {
-    flex-direction: column;
+.album-container>img{
+    width:400px;
+    height:400px;
 }
 
-.list-item-container {
-    display: flex;
-    margin: 5px;
+.toptext{
+    color:white;
 }
 
-.list-item-container:hover {
-    background-color: lightgrey;
+#namefield{
+    width: 300px;
+    height: 40px;
+    font-size: 40px;
 }
 
-.list-item-album {
-    text-align: left;
-    width: 70%;
-}
-
-.list-item-cover {
-    width: 30%;
-}
-
-.list-item-cover>img {
-    width: 30px;
-    height: 30px;
-
-}
-
-.list-item-cover {
-    margin-top: 9px;
+#winner{
+    font-size: 60px;
+    color:white;
 }
