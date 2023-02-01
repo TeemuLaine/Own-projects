@@ -1,7 +1,7 @@
 let key = "99739c15a5b77a630bd844e973035da3"
 let coverurl = []
 let albuminfo = []
-const ALBUM_MAX = 256
+const ALBUM_MAX = 128
 let used = new Array(ALBUM_MAX).fill(false)
 
 winnerAlbum = () => {
@@ -36,11 +36,6 @@ createMatchups = async (album, cover, usedThisRound) => { // function to create 
     num2 = Math.floor(Math.random() * albuminfo.length)
   } while (used[num2] || usedThisRound[num2])
   usedThisRound[num2] = true
-  console.log(num1)
-  console.log(num2)
-  console.log(used)
-  console.log(usedThisRound)
-  console.log(albuminfo)
   const album1 = document.getElementById("album1")
   album1.innerHTML = album[num1]
   const image1 = document.getElementById("album1-image")
@@ -82,7 +77,6 @@ fetchAlbums = async (user) => { // function to get the top albums data from last
       coverurl.push(item.image[3]["#text"])
     })
   } catch (error) {
-    console.log(error)
   }
   manageMatchups(albuminfo, coverurl)
 }
@@ -96,3 +90,5 @@ buttonElement.onclick = () => { // fetch when username is given
   username = usernameElement.value
   fetchAlbums(username)
 }
+
+
