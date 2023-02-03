@@ -1,12 +1,12 @@
 let key = "99739c15a5b77a630bd844e973035da3"
 let coverurl = []
 let trackinfo = []
-const track_MAX = 128
-let used = new Array(track_MAX).fill(false)
+let track_MAX = 256
+let used
 
 winnertrack = () => {
-  for (let i = 0; i < track_MAX; i++){
-    if(!used[i]){
+  for (let i = 0; i < track_MAX; i++) {
+    if (!used[i]) {
       return trackinfo[i]
     }
   }
@@ -22,7 +22,7 @@ manageMatchups = async (track, cover) => {
       await createMatchups(track, cover, usedThisRound)
     }
   }
-  document.getElementById("winner").innerHTML += "The winning track is " + winnertrack() + "!"
+  document.getElementById("winner").innerHTML = "The winning track is " + winnertrack() + "!"
 }
 
 createMatchups = async (track, cover, usedThisRound) => { // function to create the versus
@@ -61,7 +61,8 @@ createMatchups = async (track, cover, usedThisRound) => { // function to create 
   await getClick()
 }
 
-fetchtracks = async (user) => { // function to get the top tracks data from lastfm, user as parameter
+fetchTracks = async (user) => { // function to get the top tracks data from lastfm, user as parameter
+  used = new Array(track_MAX).fill(false)
   try {
     const response = await fetch( // api request
       "https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&user=" +
@@ -88,7 +89,13 @@ buttonElement.onclick = () => { // fetch when username is given
   trackinfo = []
   coverurl = []
   username = usernameElement.value
-  fetchtracks(username)
+  if (username) {
+    fetchTracks(username)
+  }
 }
 
 
+const selectElement = document.getElementById("amount");
+selectElement.addEventListener("change", (event) => {
+  track_MAX = selectElement.value
+})

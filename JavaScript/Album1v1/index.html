@@ -13,16 +13,30 @@
     <div id="top">
         <h1>Music 1v1 tournament</h1>
         <div id="buttons">
-            <h2 class="button" style="font-weight:bolder;"><a style="color:#b90000;" href="./index.html">Albums</a></h2>
+            <h2 class="button" style="font-weight:bolder;"><a style="color:#b90000;padding-bottom: 24px;border-bottom: 3px solid #b90000;" href="./index.html">Albums</a></h2>
             <h2 class="button"><a href="./artist.html">Artists</a></h2>
             <h2 class="button"><a href="./track.html">Tracks</a></h2>
         </div>
     </div>
-    <h1 class="toptext">Your last.fm username:</h1>
-    <form onsubmit="return false">
-        <input type="text" id="namefield">
-        <input type="submit" value="submit" id="submitButton">
-    </form>
+    <div id="info-container">
+        <div id="entrant-container">
+            <h1 class="toptext">Entrant count:</h1>
+            <select id="amount">
+                <option value="32">32</option>
+                <option value="64">64</option>
+                <option value="128">128</option>
+                <option selected="selected" value="256">256</option>
+                <option value="512">512</option>
+            </select>
+        </div>
+        <div id="username-container">
+            <h1 class="toptext">Your last.fm username:</h1>
+            <form onsubmit="return false">
+                <input type="text" id="namefield">
+                <input type="submit" value="Submit" id="submitButton">
+            </form>
+        </div>
+    </div>
     <div id="main-container">
         <div id="matchup-container">
             <p id="round"></p>
@@ -37,7 +51,9 @@
             <p id="winner"></p>
         </div>
     </div>
-
+    <footer>
+        <p>Made possible by the Last.fm Music Discovery API</p>
+    </footer>
     <script type="text/javascript" src="./script.js"></script>
 </body>
 

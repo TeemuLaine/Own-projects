@@ -1,12 +1,12 @@
 let key = "99739c15a5b77a630bd844e973035da3"
 let coverurl = []
 let albuminfo = []
-const ALBUM_MAX = 128
-let used = new Array(ALBUM_MAX).fill(false)
+let ALBUM_MAX = 256
+let used
 
 winnerAlbum = () => {
-  for (let i = 0; i < ALBUM_MAX; i++){
-    if(!used[i]){
+  for (let i = 0; i < ALBUM_MAX; i++) {
+    if (!used[i]) {
       return albuminfo[i]
     }
   }
@@ -22,7 +22,7 @@ manageMatchups = async (album, cover) => {
       await createMatchups(album, cover, usedThisRound)
     }
   }
-  document.getElementById("winner").innerHTML += "The winning album is " + winnerAlbum() + "!"
+  document.getElementById("winner").innerHTML = "The winning album is " + winnerAlbum() + "!"
 }
 
 createMatchups = async (album, cover, usedThisRound) => { // function to create the versus
@@ -62,6 +62,7 @@ createMatchups = async (album, cover, usedThisRound) => { // function to create 
 }
 
 fetchAlbums = async (user) => { // function to get the top albums data from lastfm, user as parameter
+  used = new Array(ALBUM_MAX).fill(false)
   try {
     const response = await fetch( // api request
       "https://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=" +
@@ -88,7 +89,12 @@ buttonElement.onclick = () => { // fetch when username is given
   albuminfo = []
   coverurl = []
   username = usernameElement.value
-  fetchAlbums(username)
+  if (username) {
+    fetchAlbums(username)
+  }
 }
 
-
+const selectElement = document.getElementById("amount");
+selectElement.addEventListener("change", (event) => {
+  ALBUM_MAX = selectElement.value
+})
