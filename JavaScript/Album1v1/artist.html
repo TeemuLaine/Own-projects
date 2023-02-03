@@ -13,11 +13,12 @@
     <div id="top">
         <h1>Music 1v1 tournament</h1>
         <div id="buttons">
-            <h2 class="button" style="font-weight:bolder;"><a style="color:#b90000;" href="./index.html">Albums</a></h2>
-            <h2 class="button"><a href="./artist.html">Artists</a></h2>
-            <h2 class="button"><a href="./track.html">Tracks</a></h2>
+            <h2 class="button underline"><a href="./index.html">Albums</a></h2>
+            <h2 class="button" style="font-weight:bolder;"><a style="color:#b90000;" href="./artist.html">Artists</a></h2>
+            <h2 class="button underline"><a href="./track.html">Tracks</a></h2>
         </div>
     </div>
+
     <h1 class="toptext">Your last.fm username:</h1>
     <form onsubmit="return false">
         <input type="text" id="namefield">
@@ -25,20 +26,20 @@
     </form>
     <div id="main-container">
         <div id="matchup-container">
-            <p id="round"></p>
-            <div class="album-container">
-                <img id="album1-image">
-                <h2 id="album1"></h2>
+            <h1 id="round"></h1>
+            <div class="artist-container">
+                <img id="artist1-image">
+                <h2 id="artist1"></h2>
             </div>
-            <div class="album-container">
-                <img id="album2-image">
-                <h2 id="album2"></h2>
+            <div class="artist-container">
+                <img id="artist2-image">
+                <h2 id="artist2"></h2>
             </div>
             <p id="winner"></p>
         </div>
     </div>
 
-    <script type="text/javascript" src="./script.js"></script>
+    <script type="text/javascript" src="./artist.js"></script>
 </body>
 
 </html>
