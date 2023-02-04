@@ -3,6 +3,7 @@ let coverurl = []
 let trackinfo = []
 let track_MAX = 256
 let used
+let period = "overall"
 
 winnertrack = () => {
   for (let i = 0; i < track_MAX; i++) {
@@ -70,7 +71,9 @@ fetchTracks = async (user) => { // function to get the top tracks data from last
       "&api_key=" +
       key +
       "&format=json&limit=" +
-      track_MAX
+      track_MAX +
+      "&period=" +
+      period
     )
     const tracks = await response.json()
     tracks.toptracks.track.map((item) => { // map the json data into a usable form
@@ -94,8 +97,12 @@ buttonElement.onclick = () => { // fetch when username is given
   }
 }
 
+const amountElement = document.getElementById("amount");
+amountElement.addEventListener("change", (event) => {
+  track_MAX = amountElement.value
+})
 
-const selectElement = document.getElementById("amount");
-selectElement.addEventListener("change", (event) => {
-  track_MAX = selectElement.value
+const periodElement = document.getElementById("period");
+periodElement.addEventListener("change", (event) => {
+  period = periodElement.value
 })

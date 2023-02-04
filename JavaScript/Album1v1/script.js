@@ -3,6 +3,7 @@ let coverurl = []
 let albuminfo = []
 let ALBUM_MAX = 256
 let used
+let period
 
 winnerAlbum = () => {
   for (let i = 0; i < ALBUM_MAX; i++) {
@@ -70,7 +71,9 @@ fetchAlbums = async (user) => { // function to get the top albums data from last
       "&api_key=" +
       key +
       "&format=json&limit=" +
-      ALBUM_MAX
+      ALBUM_MAX +
+      "&period=" +
+      period
     )
     const albums = await response.json()
     albums.topalbums.album.map((item) => { // map the json data into a usable form
@@ -94,7 +97,12 @@ buttonElement.onclick = () => { // fetch when username is given
   }
 }
 
-const selectElement = document.getElementById("amount");
-selectElement.addEventListener("change", (event) => {
-  ALBUM_MAX = selectElement.value
+const amountElement = document.getElementById("amount");
+amountElement.addEventListener("change", (event) => {
+  ALBUM_MAX = amountElement.value
+})
+
+const periodElement = document.getElementById("period");
+periodElement.addEventListener("change", (event) => {
+  period = periodElement.value
 })

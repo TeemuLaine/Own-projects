@@ -2,6 +2,8 @@ let key = "99739c15a5b77a630bd844e973035da3"
 let artistpics = []
 let artistnames = []
 let ARTIST_MAX = 256
+let used
+let period
 
 winnerArtist = () => {
   for (let i = 0; i < ARTIST_MAX; i++) {
@@ -69,7 +71,9 @@ fetchArtists = async (user) => { // function to get the top artists data from la
       "&api_key=" +
       key +
       "&format=json&limit=" +
-      ARTIST_MAX
+      ARTIST_MAX +
+      "&period=" +
+      period
     )
     const artists = await response.json()
     artists.topartists.artist.map((item) => { // map the json data into a usable form
@@ -93,7 +97,12 @@ buttonElement.onclick = () => { // fetch when username is given
   }
 }
 
-const selectElement = document.getElementById("amount");
-selectElement.addEventListener("change", (event) => {
-  ARTIST_MAX = selectElement.value
+const amountElement = document.getElementById("amount");
+amountElement.addEventListener("change", (event) => {
+  ARTIST_MAX = amountElement.value
+})
+
+const periodElement = document.getElementById("period");
+periodElement.addEventListener("change", (event) => {
+  period = periodElement.value
 })

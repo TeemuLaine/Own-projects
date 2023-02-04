@@ -29,8 +29,19 @@
                 <option value="512">512</option>
             </select>
         </div>
+        <div id="period-container">
+            <h1 class="toptext">Time period:</h1>
+            <select id="period">
+                <option selected="selected" value="overall">Alltime</option>
+                <option value="7day">Week</option>
+                <option value="1month">Month</option>
+                <option value="3month" value="256">3 months</option>
+                <option value="6month">6 months</option>
+                <option value="12month">Year</option>
+            </select>
+        </div>
         <div id="username-container">
-            <h1 class="toptext">Your last.fm username:</h1>
+            <h1 class="toptext">Last.fm username:</h1>
             <form onsubmit="return false">
                 <input type="text" id="namefield">
                 <input type="submit" value="Submit" id="submitButton">
